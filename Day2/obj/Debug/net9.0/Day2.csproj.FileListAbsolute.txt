@@ -1,0 +1,15 @@
+/Users/larsan/Documents/AdventOfCode/2024/Day2/bin/Debug/net9.0/input.txt
+/Users/larsan/Documents/AdventOfCode/2024/Day2/bin/Debug/net9.0/Day2
+/Users/larsan/Documents/AdventOfCode/2024/Day2/bin/Debug/net9.0/Day2.deps.json
+/Users/larsan/Documents/AdventOfCode/2024/Day2/bin/Debug/net9.0/Day2.runtimeconfig.json
+/Users/larsan/Documents/AdventOfCode/2024/Day2/bin/Debug/net9.0/Day2.dll
+/Users/larsan/Documents/AdventOfCode/2024/Day2/bin/Debug/net9.0/Day2.pdb
+/Users/larsan/Documents/AdventOfCode/2024/Day2/obj/Debug/net9.0/Day2.GeneratedMSBuildEditorConfig.editorconfig
+/Users/larsan/Documents/AdventOfCode/2024/Day2/obj/Debug/net9.0/Day2.AssemblyInfoInputs.cache
+/Users/larsan/Documents/AdventOfCode/2024/Day2/obj/Debug/net9.0/Day2.AssemblyInfo.cs
+/Users/larsan/Documents/AdventOfCode/2024/Day2/obj/Debug/net9.0/Day2.csproj.CoreCompileInputs.cache
+/Users/larsan/Documents/AdventOfCode/2024/Day2/obj/Debug/net9.0/Day2.dll
+/Users/larsan/Documents/AdventOfCode/2024/Day2/obj/Debug/net9.0/refint/Day2.dll
+/Users/larsan/Documents/AdventOfCode/2024/Day2/obj/Debug/net9.0/Day2.pdb
+/Users/larsan/Documents/AdventOfCode/2024/Day2/obj/Debug/net9.0/Day2.genruntimeconfig.cache
+/Users/larsan/Documents/AdventOfCode/2024/Day2/obj/Debug/net9.0/ref/Day2.dll
