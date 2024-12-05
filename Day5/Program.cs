@@ -1,52 +1,66 @@
-﻿
-using System.Data;
+﻿using System.Data;
 using System.Diagnostics;
-using System.Reflection;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
+using System.Net;
 
 
+var input = File.ReadAllText("input.txt");
 
-
-var input = File.ReadAllText("exampledata.txt");
-
-var split = input.Split($"\n\n", StringSplitOptions.RemoveEmptyEntries);
-
-Debug.Assert(split.Length == 2);
-
-var rules = split[0].Split('\n').Select(r =>
+static InputData GetInputData(string input)
 {
-    var parts = r.Split("|");
-    return new Rule(int.Parse(parts[0]), int.Parse(parts[1]));
-}).ToList();
+    var split = input.Split($"\n\n", StringSplitOptions.RemoveEmptyEntries);
 
-var list = split[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
+    Debug.Assert(split.Length == 2);
 
-List<List<int>> updateList = list.Select(u =>
-{
-    var parts = u.Split(",");
-    return parts.Select(int.Parse).ToList();
-}).ToList();
+    var rules = split[0].Split('\n').Select(r =>
+    {
+        var parts = r.Split("|");
+        return new Rule(int.Parse(parts[0]), int.Parse(parts[1]));
+    }).ToList();
 
-// List<LinkedList<int>> linkedList = list.Select(u =>
+    var list = split[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+    List<List<int>> updateList = list.Select(u =>
+    {
+        var parts = u.Split(",");
+        return parts.Select(int.Parse).ToList();
+    }).ToList();
+
+    return new InputData(rules, updateList);
+}
+
+// var split = input.Split($"\n\n", StringSplitOptions.RemoveEmptyEntries);
+
+// Debug.Assert(split.Length == 2);
+
+// var rules = split[0].Split('\n').Select(r =>
+// {
+//     var parts = r.Split("|");
+//     return new Rule(int.Parse(parts[0]), int.Parse(parts[1]));
+// }).ToList();
+
+// var list = split[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+// List<List<int>> updateList = list.Select(u =>
 // {
 //     var parts = u.Split(",");
-//     return new LinkedList<int>(parts.Select(int.Parse));
+//     return parts.Select(int.Parse).ToList();
 // }).ToList();
 
 var correctUpdateList = new List<List<int>>();
 var incorrectUpdateList = new List<List<int>>();
 
-foreach (var update in updateList)
+var inputData = GetInputData(input);
+
+foreach (var update in inputData.Updates)
 {
     var updateCorrect = true;
 
-    foreach (var rule in rules)
+    foreach (var rule in inputData.Rules)
     {
         bool checkIfBothValuesExist = update.Contains(rule.Left) && update.Contains(rule.Right);
         if (checkIfBothValuesExist)
         {
-            bool isBefore = IsValueBefore(update, rule.Left, rule.Right);
+            bool isBefore = IsLeftBeforeRight(update, rule.Left, rule.Right);
             if (!isBefore)
             {
                 // The values are not in the correct order
@@ -66,8 +80,6 @@ foreach (var update in updateList)
     }
 }
 
-Console.WriteLine($"Rules count: {rules.Count}");
-Console.WriteLine($"Updates count: {updateList.Count}");
 Console.WriteLine($"Correct updates: {correctUpdateList.Count}");
 
 correctUpdateList.Sum(u => GetMiddlePage(u));
@@ -85,28 +97,40 @@ foreach (var update in incorrectUpdateList)
 
 foreach (var update in listOfUpdates)
 {
-    foreach (var rule in rules)
+    while (ProcessUpdatesUntilAllRulesPass(update, inputData.Rules))
     {
-        bool checkIfBothValuesExist = update.Contains(rule.Left) && update.Contains(rule.Right);
-        if (checkIfBothValuesExist)
-        {
-            var nodeLeft = update.Find(rule.Left);
-            var nodeRight = update.Find(rule.Right);
-            bool isBefore = IsValueBefore(update.ToList(), nodeLeft.Value, nodeRight.Value);
-            if (!isBefore)
-            {
-                // The values are not in the correct order
-                update.Remove(nodeLeft);
-                // update.AddAfter(update.Find(rule.Right), rule.Left);
-                update.AddBefore(nodeRight, nodeLeft);
-                Debug.Assert(IsValueBefore(update.ToList(), nodeLeft.Value, nodeRight.Value));
-            }
-        }
+        // Continue processing until no more changes are needed
     }
 }
 
-Console.WriteLine($"Sum of middle pages: {incorrectUpdateList.Sum(u => GetMiddlePage(u))} (Answer to Part 2)");
+Console.WriteLine($"Sum of middle pages: {listOfUpdates.Sum(u => GetMiddlePage(u.ToList()))} (Answer to Part 2)");
 
+static bool ProcessUpdatesUntilAllRulesPass(LinkedList<int> update, List<Rule> rules)
+{
+    bool madeChanges = false;
+
+    foreach (var rule in rules)
+    {
+        bool checkIfBothValuesExist = update.Contains(rule.Left) && update.Contains(rule.Right);
+        if (!checkIfBothValuesExist)
+        {
+            continue;
+        }
+
+        var nodeLeft = update.Find(rule.Left);
+        var nodeRight = update.Find(rule.Right);
+        bool isBefore = IsLeftBeforeRight(update.ToList(), nodeLeft.Value, nodeRight.Value);
+        if (!isBefore)
+        {
+            // The values are not in the correct order
+            update.Remove(nodeLeft);
+            update.AddBefore(nodeRight, nodeLeft);
+            madeChanges = true;
+        }
+    }
+
+    return madeChanges;
+}
 
 static int GetMiddlePage(List<int> list)
 {
@@ -120,7 +144,7 @@ static int GetMiddlePage(List<int> list)
 }
 
 
-static bool IsValueBefore(List<int> list, int value1, int value2)
+static bool IsLeftBeforeRight(List<int> list, int value1, int value2)
 {
     int index1 = list.IndexOf(value1);
     int index2 = list.IndexOf(value2);
@@ -130,14 +154,9 @@ static bool IsValueBefore(List<int> list, int value1, int value2)
         // One or both values are not in the list
         return false;
     }
-
     return index1 < index2;
 }
 
 
-
-
-
-
 record Rule(int Left, int Right);
-
+record InputData(List<Rule> Rules, List<List<int>> Updates);
