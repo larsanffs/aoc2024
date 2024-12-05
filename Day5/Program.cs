@@ -38,10 +38,6 @@ foreach (var update in inputData.Updates)
     }
 }
 
-Console.WriteLine($"Correct updates: {correctUpdateList.Count}");
-
-correctUpdateList.Sum(u => GetMiddlePage(u));
-
 Console.WriteLine($"Sum of middle pages: {correctUpdateList.Sum(u => GetMiddlePage(u))} (Answer to Part 1)");
 
 // PART 2 starts here
