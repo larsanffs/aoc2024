@@ -1,55 +1,13 @@
 ﻿using System.Data;
 using System.Diagnostics;
-using System.Net;
-
 
 var input = File.ReadAllText("input.txt");
 
-static InputData GetInputData(string input)
-{
-    var split = input.Split($"\n\n", StringSplitOptions.RemoveEmptyEntries);
-
-    Debug.Assert(split.Length == 2);
-
-    var rules = split[0].Split('\n').Select(r =>
-    {
-        var parts = r.Split("|");
-        return new Rule(int.Parse(parts[0]), int.Parse(parts[1]));
-    }).ToList();
-
-    var list = split[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-    List<List<int>> updateList = list.Select(u =>
-    {
-        var parts = u.Split(",");
-        return parts.Select(int.Parse).ToList();
-    }).ToList();
-
-    return new InputData(rules, updateList);
-}
-
-// var split = input.Split($"\n\n", StringSplitOptions.RemoveEmptyEntries);
-
-// Debug.Assert(split.Length == 2);
-
-// var rules = split[0].Split('\n').Select(r =>
-// {
-//     var parts = r.Split("|");
-//     return new Rule(int.Parse(parts[0]), int.Parse(parts[1]));
-// }).ToList();
-
-// var list = split[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-// List<List<int>> updateList = list.Select(u =>
-// {
-//     var parts = u.Split(",");
-//     return parts.Select(int.Parse).ToList();
-// }).ToList();
+var inputData = GetInputData(input);
 
 var correctUpdateList = new List<List<int>>();
 var incorrectUpdateList = new List<List<int>>();
 
-var inputData = GetInputData(input);
 
 foreach (var update in inputData.Updates)
 {
@@ -104,6 +62,29 @@ foreach (var update in listOfUpdates)
 }
 
 Console.WriteLine($"Sum of middle pages: {listOfUpdates.Sum(u => GetMiddlePage(u.ToList()))} (Answer to Part 2)");
+
+static InputData GetInputData(string input)
+{
+    var split = input.Split($"\n\n", StringSplitOptions.RemoveEmptyEntries);
+
+    Debug.Assert(split.Length == 2);
+
+    var rules = split[0].Split('\n').Select(r =>
+    {
+        var parts = r.Split("|");
+        return new Rule(int.Parse(parts[0]), int.Parse(parts[1]));
+    }).ToList();
+
+    var list = split[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+    List<List<int>> updateList = list.Select(u =>
+    {
+        var parts = u.Split(",");
+        return parts.Select(int.Parse).ToList();
+    }).ToList();
+
+    return new InputData(rules, updateList);
+}
 
 static bool ProcessUpdatesUntilAllRulesPass(LinkedList<int> update, List<Rule> rules)
 {
