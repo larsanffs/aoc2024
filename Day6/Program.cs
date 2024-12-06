@@ -1,7 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-
-var input = File.ReadAllLines("input.txt");
+﻿var input = File.ReadAllLines("input.txt");
 
 var map = new Map(input);
 var player = new Player(map);

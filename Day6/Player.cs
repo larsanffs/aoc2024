@@ -5,17 +5,17 @@ public class Player(Map map)
     public int X { get; private set; }
     public int Y { get; private set; }
     public int StepsCounter { get; set; } = 0;
-    public Direction CurrentDirection { get; set; } = Direction.Up;
+    public Direction CurrentDirection { get; private set; } = Direction.Up;
     public HashSet<Position> ExploredPositions { get; } = new();
     private void InitializePlayerPosition()
     {
-        var startPos = map.InitialPlayerPosition;  // This uses existing StartPosition property
+        var startPos = map.InitialPlayerPosition;
         X = startPos.X;
         Y = startPos.Y;
         ExploredPositions.Add(new Position { X = X, Y = Y });
     }
 
-    public bool CheckIfNextStepIsObstacle()
+    private bool CheckIfNextStepIsObstacle()
     {
         switch (CurrentDirection)
         {
@@ -48,7 +48,7 @@ public class Player(Map map)
         return true;
     }
 
-    public void TurnRight()
+    private void TurnRight()
     {
         CurrentDirection = CurrentDirection switch
         {
@@ -60,7 +60,7 @@ public class Player(Map map)
         };
     }
 
-    public void Move()
+    private void Move()
     {
         var oldPosition = new Position { X = X, Y = Y };
         switch (CurrentDirection)
