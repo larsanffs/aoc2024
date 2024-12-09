@@ -3,7 +3,7 @@ using Dumpify;
 
 
 
-using var fileStream = new System.IO.StreamReader("input.txt");
+using var fileStream = new System.IO.StreamReader("exampledata.txt");
 var input = fileStream.ReadToEnd();
 
 
@@ -18,8 +18,9 @@ for (int i = 0; i < input.Length; i++)
     if (i % 2 == 0)
     {
         var file = int.Parse(input[i].ToString());
-        for (int j = 0; j < file; j++)
+        for (int j = 1; j <= file; j++)
         {
+
             var block = new File { Index = i + j, End = i + file, Length = file, FileId = fileId };
             diskMap.Blocks.AddLast(block);
         }
@@ -28,7 +29,7 @@ for (int i = 0; i < input.Length; i++)
     else
     {
         var freeSpace = int.Parse(input[i].ToString());
-        for (int j = 0; j < freeSpace; j++)
+        for (int j = 1; j <= freeSpace; j++)
         {
             var block = new FreeSpace { Index = i + j, End = i + freeSpace, Length = freeSpace };
             diskMap.Blocks.AddLast(block);
@@ -75,7 +76,36 @@ public class DiskMap
                 if (nextFreeSpaceNode != null)
                 {
                     // Swap places with nextFreeSpaceNode and node
-                    Blocks.SwapNodeValue(node, nextFreeSpaceNode);
+                    // Blocks.SwapNodeValue(node, nextFreeSpaceNode);
+                    node.SwapValue(nextFreeSpaceNode);
+
+                    changesMade = true;
+                }
+            }
+            node = node.Previous;
+        }
+        Visualize().Dump();
+        return changesMade;
+    }
+
+    public bool MoveWholeFilesFromRightToLeft()
+    {
+        bool changesMade = false;
+        var node = Blocks.Last;
+        while (node != null)
+        {
+            var block = node.Value;
+            if (block is File file)
+            {
+                // get the whole file nodes
+
+
+                var nextFreeSpaceNode = GetLeftMostFreeSpaceNode();
+                if (nextFreeSpaceNode != null)
+                {
+                    // Swap places with nextFreeSpaceNode and node
+                    // Blocks.SwapNodeValue(node, nextFreeSpaceNode);
+                    node.SwapValue(nextFreeSpaceNode);
 
                     changesMade = true;
                 }
