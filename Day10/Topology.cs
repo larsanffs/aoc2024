@@ -4,11 +4,11 @@ public class Topology
     public int X { get; set; }
     public int Y { get; set; }
     public int Height { get; set; }
+    public TopologyMap Map { get; init; }
 
     public List<Topology> GetValidNeighbors()
     {
-        var map = TopologyMap.Map; // You'll need to make 'map' accessible
-        return map.GetNeighbors(X, Y)
+        return Map.GetNeighbors(X, Y)
             .Where(n => n.Height == Height + 1)
             .ToList();
     }

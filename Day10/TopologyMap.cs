@@ -4,15 +4,18 @@ public class TopologyMap
     public Topology[,] Topologies { get; set; }
     public int Width => Topologies.GetLength(1);
     public int Height => Topologies.GetLength(0);
+
+    public TopologyMap()
+    {
+    }
     public TopologyMap(Topology[,] topologies)
     {
         Topologies = topologies;
     }
 
-    public static TopologyMap Map { get; set; }
-
     public static TopologyMap ParseMap(string[] lines)
     {
+        TopologyMap map = new TopologyMap();
         var height = lines.Length;
         var width = lines[0].Length;
         var topologies = new Topology[height, width];
@@ -25,12 +28,13 @@ public class TopologyMap
                 {
                     X = x,
                     Y = y,
-                    Height = int.Parse(lines[y][x].ToString())
+                    Height = int.Parse(lines[y][x].ToString()),
+                    Map = map
                 };
             }
         }
-
-        return new TopologyMap(topologies);
+        map.Topologies = topologies;
+        return map;
     }
 
     public Topology GetTopology(int x, int y)

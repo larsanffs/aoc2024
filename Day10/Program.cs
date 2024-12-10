@@ -3,12 +3,12 @@ using Dumpify;
 
 var input = System.IO.File.ReadAllLines("input.txt");
 
-TopologyMap.Map = TopologyMap.ParseMap(input);
+var map = TopologyMap.ParseMap(input);
 
-List<Trailhead> trailheads = TopologyMap.Map.Topologies.Cast<Topology>()
-                                                       .Where(t => t.Height == 0)
-                                                       .Select(t => new Trailhead(t))
-                                                       .ToList();
+List<Trailhead> trailheads = map.Topologies.Cast<Topology>()
+                                           .Where(t => t.Height == 0)
+                                           .Select(t => new Trailhead(t))
+                                           .ToList();
 
 trailheads.ForEach(t => t.FindRoutes());
 
