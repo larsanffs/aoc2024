@@ -1,7 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Dumpify;
-
-var input = System.IO.File.ReadAllLines("input.txt");
+﻿var input = System.IO.File.ReadAllLines("input.txt");
 
 var map = TopologyMap.ParseMap(input);
 
@@ -14,4 +11,4 @@ trailheads.ForEach(t => t.FindRoutes());
 
 trailheads.ForEach(t => Console.WriteLine($"Trailhead at {t.Topology.X}, {t.Topology.Y} has a score of {t.Score}"));
 
-Console.WriteLine($"The sum of all scores is {trailheads.Sum(t => t.Score)}");
+Console.WriteLine($"The sum of all trail scores is {trailheads.Sum(t => t.Score)}");
